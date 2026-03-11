@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../data/mock_data.dart';
+import '../data/habit_data.dart';
 import '../models/habit_model.dart';
 import '../theme/app_theme.dart';
 
 class AddHabitScreen extends StatefulWidget {
-  final Habit? habit; // null = add, non-null = edit
+  final Habit? habit;
   const AddHabitScreen({super.key, this.habit});
 
   @override
@@ -62,24 +62,21 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   void _save() {
     if (_nameController.text.trim().isEmpty) return;
     final habit = Habit(
-      id: widget.habit?.id ??
-          DateTime.now().millisecondsSinceEpoch.toString(),
+      id: widget.habit?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
       name: _nameController.text.trim(),
       description: _descController.text.trim(),
       icon: _selectedIcon,
       color: _selectedColor,
       frequency: _frequency,
       category: _category,
-      completedDates:
-          List.from(widget.habit?.completedDates ?? []),
+      completedDates: List.from(widget.habit?.completedDates ?? []),
       reminders: List.from(_reminderTimes),
     );
     if (widget.habit == null) {
-      MockData.habits.add(habit);
+      HabitData.habits.add(habit);
     } else {
-      final idx =
-          MockData.habits.indexWhere((h) => h.id == habit.id);
-      if (idx != -1) MockData.habits[idx] = habit;
+      final idx = HabitData.habits.indexWhere((h) => h.id == habit.id);
+      if (idx != -1) HabitData.habits[idx] = habit;
     }
     Navigator.pop(context);
   }
@@ -95,12 +92,8 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppTheme.divider,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Icon(Icons.arrow_back_ios_new_rounded,
-                size: 16),
+            decoration: BoxDecoration(color: AppTheme.divider, borderRadius: BorderRadius.circular(10)),
+            child: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
           ),
           onPressed: () => Navigator.pop(context),
         ),
@@ -108,11 +101,7 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         actions: [
           TextButton(
             onPressed: _save,
-            child: const Text('Save',
-                style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.primary)),
+            child: const Text('Save', style: TextStyle(fontWeight: FontWeight.w700, color: AppTheme.secondary)),
           ),
         ],
       ),
@@ -121,185 +110,117 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Icon and color preview
+            // Preview
             Center(
               child: Column(
                 children: [
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 76,
+                    height: 76,
                     decoration: BoxDecoration(
                       color: _selectedColor,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: _selectedColor.withOpacity(0.4),
-                          blurRadius: 16,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      borderRadius: BorderRadius.circular(22),
                     ),
-                    child: Icon(_selectedIcon,
-                        color: Colors.white, size: 42),
+                    child: Icon(_selectedIcon, color: Colors.white, size: 40),
                   ),
                   const SizedBox(height: 8),
-                  const Text('Tap to customize',
-                      style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12,
-                          color: AppTheme.textSecondary)),
+                  const Text('Tap to customize', style: TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
                 ],
               ),
             ),
             const SizedBox(height: 24),
 
-            // Name
-            _Label('Habit Name *'),
+            _Label('Habit Name'),
             const SizedBox(height: 8),
             TextFormField(
               controller: _nameController,
-              style:
-                  const TextStyle(fontFamily: 'Nunito', fontSize: 15),
+              style: const TextStyle(fontSize: 15),
               decoration: const InputDecoration(
                 hintText: 'e.g., Drink 8 glasses of water',
-                prefixIcon: Icon(Icons.label_rounded,
-                    color: AppTheme.primary, size: 20),
+                prefixIcon: Icon(Icons.label_rounded, color: AppTheme.secondary, size: 20),
               ),
             ),
             const SizedBox(height: 16),
 
-            // Description
             _Label('Description'),
             const SizedBox(height: 8),
             TextFormField(
               controller: _descController,
               maxLines: 2,
-              style:
-                  const TextStyle(fontFamily: 'Nunito', fontSize: 14),
-              decoration: const InputDecoration(
-                  hintText: 'What motivates you to build this habit?'),
+              style: const TextStyle(fontSize: 14),
+              decoration: const InputDecoration(hintText: 'What motivates you?'),
             ),
             const SizedBox(height: 20),
 
-            // Icon picker
             _Label('Choose Icon'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 10,
               runSpacing: 10,
               children: _icons.map((icon) {
-                final isSelected = _selectedIcon == icon;
+                final isSel = _selectedIcon == icon;
                 return GestureDetector(
                   onTap: () => setState(() => _selectedIcon = icon),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
+                  child: Container(
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? _selectedColor
-                          : _selectedColor.withOpacity(0.1),
+                      color: isSel ? _selectedColor : _selectedColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                          color: isSelected
-                              ? _selectedColor
-                              : Colors.transparent,
-                          width: 2),
+                      border: Border.all(color: isSel ? _selectedColor : Colors.transparent, width: 2),
                     ),
-                    child: Icon(icon,
-                        color:
-                            isSelected ? Colors.white : _selectedColor,
-                        size: 22),
+                    child: Icon(icon, color: isSel ? Colors.white : _selectedColor, size: 22),
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 20),
 
-            // Color picker
             _Label('Choose Color'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 10,
               runSpacing: 10,
               children: AppTheme.habitColors.map((color) {
-                final isSelected = _selectedColor == color;
+                final isSel = _selectedColor == color;
                 return GestureDetector(
                   onTap: () => setState(() => _selectedColor = color),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
+                  child: Container(
                     width: 36,
                     height: 36,
                     decoration: BoxDecoration(
                       color: color,
                       shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isSelected
-                              ? Colors.white
-                              : Colors.transparent,
-                          width: 3),
-                      boxShadow: isSelected
-                          ? [
-                              BoxShadow(
-                                  color: color.withOpacity(0.5),
-                                  blurRadius: 8)
-                            ]
-                          : [],
+                      border: Border.all(color: isSel ? Colors.white : Colors.transparent, width: 3),
                     ),
-                    child: isSelected
-                        ? const Icon(Icons.check_rounded,
-                            color: Colors.white, size: 18)
-                        : null,
+                    child: isSel ? const Icon(Icons.check_rounded, color: Colors.white, size: 18) : null,
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 20),
 
-            // Frequency
             _Label('Frequency'),
             const SizedBox(height: 10),
             Row(
-              children:
-                  HabitFrequency.values.map((f) {
-                final labels = {
-                  HabitFrequency.daily: 'Daily',
-                  HabitFrequency.weekly: 'Weekly',
-                  HabitFrequency.custom: 'Custom',
-                };
-                final isSelected = _frequency == f;
+              children: HabitFrequency.values.map((f) {
+                final labels = {HabitFrequency.daily: 'Daily', HabitFrequency.weekly: 'Weekly', HabitFrequency.custom: 'Custom'};
+                final isSel = _frequency == f;
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: GestureDetector(
                       onTap: () => setState(() => _frequency = f),
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppTheme.primary.withOpacity(0.1)
-                              : Colors.transparent,
-                          border: Border.all(
-                              color: isSelected
-                                  ? AppTheme.primary
-                                  : AppTheme.divider,
-                              width: isSelected ? 1.5 : 1),
+                          color: isSel ? AppTheme.secondary.withOpacity(0.1) : Colors.transparent,
+                          border: Border.all(color: isSel ? AppTheme.secondary : AppTheme.divider, width: isSel ? 1.5 : 1),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          labels[f]!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: isSelected
-                                ? AppTheme.primary
-                                : AppTheme.textSecondary,
-                          ),
-                        ),
+                        child: Text(labels[f]!, textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700,
+                            color: isSel ? AppTheme.secondary : AppTheme.textSecondary)),
                       ),
                     ),
                   ),
@@ -308,37 +229,24 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
             ),
             const SizedBox(height: 20),
 
-            // Category
             _Label('Category'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: _categoryLabels.entries.map((e) {
-                final isSelected = _category == e.key;
+                final isSel = _category == e.key;
                 return GestureDetector(
                   onTap: () => setState(() => _category = e.key),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                     decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppTheme.primary
-                          : AppTheme.primary.withOpacity(0.07),
+                      color: isSel ? AppTheme.secondary : AppTheme.secondary.withOpacity(0.07),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: Text(
-                      e.value,
-                      style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: isSelected
-                            ? Colors.white
-                            : AppTheme.textSecondary,
-                      ),
-                    ),
+                    child: Text(e.value,
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700,
+                        color: isSel ? Colors.white : AppTheme.textSecondary)),
                   ),
                 );
               }).toList(),
@@ -365,14 +273,7 @@ class _Label extends StatelessWidget {
   const _Label(this.text);
 
   @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: const TextStyle(
-          fontFamily: 'Nunito',
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: AppTheme.textSecondary,
-          letterSpacing: 0.3,
-        ),
-      );
+  Widget build(BuildContext context) {
+    return Text(text, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppTheme.textPrimary));
+  }
 }
