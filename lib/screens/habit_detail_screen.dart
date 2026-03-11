@@ -12,8 +12,7 @@ class HabitDetailScreen extends StatefulWidget {
   State<HabitDetailScreen> createState() => _HabitDetailScreenState();
 }
 
-class _HabitDetailScreenState extends State<HabitDetailScreen>
-    with SingleTickerProviderStateMixin {
+class _HabitDetailScreenState extends State<HabitDetailScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late Habit habit;
 
@@ -32,8 +31,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
 
   void _toggleToday() {
     setState(() {
-      final today = DateTime(
-          DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
       if (habit.isCompletedOn(today)) {
         habit.completedDates.removeWhere((d) => d == today);
       } else {
@@ -58,8 +56,7 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
               child: CircleAvatar(
                 backgroundColor: Colors.white.withOpacity(0.2),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: Colors.white, size: 16),
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 16),
                   onPressed: () => Navigator.pop(context),
                 ),
               ),
@@ -70,30 +67,16 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
                 child: CircleAvatar(
                   backgroundColor: Colors.white.withOpacity(0.2),
                   child: IconButton(
-                    icon: const Icon(Icons.edit_rounded,
-                        color: Colors.white, size: 18),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => AddHabitScreen(habit: habit),
-                      ),
-                    ).then((_) => setState(() {})),
+                    icon: const Icon(Icons.edit_rounded, color: Colors.white, size: 18),
+                    onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => AddHabitScreen(habit: habit))).then((_) => setState(() {})),
                   ),
                 ),
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      habit.color,
-                      habit.color.withOpacity(0.7),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
+                color: habit.color,
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(20, 56, 20, 16),
@@ -104,42 +87,24 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
                         Row(
                           children: [
                             Container(
-                              width: 56,
-                              height: 56,
+                              width: 54,
+                              height: 54,
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.25),
+                                color: Colors.white.withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(16),
                               ),
-                              child: Icon(habit.icon,
-                                  color: Colors.white, size: 30),
+                              child: Icon(habit.icon, color: Colors.white, size: 28),
                             ),
                             const SizedBox(width: 14),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    habit.name,
-                                    style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    habit.description.isEmpty
-                                        ? 'Track your daily habit'
-                                        : habit.description,
-                                    style: TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 12,
-                                      color:
-                                          Colors.white.withOpacity(0.8),
-                                    ),
-                                    maxLines: 2,
-                                  ),
+                                  Text(habit.name,
+                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.white)),
+                                  Text(habit.description.isEmpty ? 'Track your daily habit' : habit.description,
+                                    style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.8)),
+                                    maxLines: 2),
                                 ],
                               ),
                             ),
@@ -160,36 +125,20 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
                 Container(
                   color: habit.color,
                   child: Container(
-                    margin: EdgeInsets.zero,
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: AppTheme.surface,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                      ),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(24), topRight: Radius.circular(24)),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 16),
                       child: Row(
                         children: [
-                          _StatPill(
-                            label: 'Current Streak',
-                            value: '${habit.currentStreak}🔥',
-                            color: habit.color,
-                          ),
+                          _StatPill(label: 'Current', value: '${habit.currentStreak}', icon: Icons.local_fire_department_rounded, color: habit.color),
                           const SizedBox(width: 10),
-                          _StatPill(
-                            label: 'Best Streak',
-                            value: '${habit.longestStreak}⭐',
-                            color: AppTheme.secondary,
-                          ),
+                          _StatPill(label: 'Best', value: '${habit.longestStreak}', icon: Icons.star_rounded, color: AppTheme.secondary),
                           const SizedBox(width: 10),
-                          _StatPill(
-                            label: 'Total Done',
-                            value: '${habit.totalCompletions}✅',
-                            color: AppTheme.accent,
-                          ),
+                          _StatPill(label: 'Total', value: '${habit.totalCompletions}', icon: Icons.check_circle_rounded, color: AppTheme.accent),
                         ],
                       ),
                     ),
@@ -201,41 +150,27 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: habit.color.withOpacity(0.08),
+                      color: habit.color.withOpacity(0.3),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TabBar(
                       controller: _tabController,
-                      labelStyle: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13),
-                      unselectedLabelStyle: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13),
-                      labelColor: habit.color,
-                      unselectedLabelColor: AppTheme.textSecondary,
-                      indicator: BoxDecoration(
-                        color: habit.color,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                      labelStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white.withOpacity(0.6),
+                      indicator: BoxDecoration(color: habit.color, borderRadius: BorderRadius.circular(10)),
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicatorColor: Colors.transparent,
                       dividerColor: Colors.transparent,
                       labelPadding: EdgeInsets.zero,
                       onTap: (_) => setState(() {}),
-                      tabs: const [
-                        Tab(text: 'Overview'),
-                        Tab(text: 'History'),
-                        Tab(text: 'Stats'),
-                      ],
+                      tabs: const [Tab(text: 'Overview'), Tab(text: 'History'), Tab(text: 'Stats')],
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
 
-                // Tab content
                 SizedBox(
                   height: 380,
                   child: TabBarView(
@@ -257,23 +192,15 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
           padding: const EdgeInsets.all(20),
           child: ElevatedButton.icon(
             onPressed: _toggleToday,
-            icon: Icon(
-                isCompletedToday
-                    ? Icons.undo_rounded
-                    : Icons.check_rounded,
-                size: 20),
-            label: Text(
-                isCompletedToday ? 'Mark as Missed' : 'Complete Today!'),
+            icon: Icon(isCompletedToday ? Icons.undo_rounded : Icons.check_rounded, size: 20),
+            label: Text(isCompletedToday ? 'Mark as Missed' : 'Complete Today!'),
             style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  isCompletedToday ? AppTheme.textSecondary : habit.color,
+              backgroundColor: isCompletedToday ? AppTheme.textSecondary : habit.color,
               foregroundColor: Colors.white,
               elevation: 0,
               padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14)),
-              textStyle: const TextStyle(
-                  fontFamily: 'Nunito', fontWeight: FontWeight.w700),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              textStyle: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
         ),
@@ -285,34 +212,22 @@ class _HabitDetailScreenState extends State<HabitDetailScreen>
 class _StatPill extends StatelessWidget {
   final String label;
   final String value;
+  final IconData icon;
   final Color color;
-  const _StatPill(
-      {required this.label, required this.value, required this.color});
+  const _StatPill({required this.label, required this.value, required this.icon, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(14),
-        ),
+        decoration: BoxDecoration(color: color.withOpacity(0.1), borderRadius: BorderRadius.circular(14)),
         child: Column(
           children: [
-            Text(value,
-                style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: color)),
+            Icon(icon, color: color, size: 18),
             const SizedBox(height: 2),
-            Text(label,
-                style: const TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 10,
-                    color: AppTheme.textSecondary),
-                textAlign: TextAlign.center),
+            Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: color)),
+            Text(label, style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary)),
           ],
         ),
       ),
@@ -331,110 +246,63 @@ class _OverviewTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Last 7 Days',
-              style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                  color: AppTheme.textSecondary)),
-          const SizedBox(height: 12),
+          const Text('This Week', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: AppTheme.textPrimary)),
+          const SizedBox(height: 10),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(7, (i) {
               final day = DateTime.now().subtract(Duration(days: 6 - i));
-              final isCompleted = habit.isCompletedOn(day);
-              final isToday = i == 6;
-              final days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-              final weekDay = days[day.weekday - 1];
-              return Column(
-                children: [
-                  Text(weekDay,
-                      style: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 12,
-                          color: AppTheme.textSecondary)),
-                  const SizedBox(height: 6),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isCompleted
-                          ? habit.color
-                          : habit.color.withOpacity(0.08),
-                      border: isToday
-                          ? Border.all(color: habit.color, width: 2)
-                          : null,
+              final done = habit.isCompletedOn(day);
+              final dayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+              final weekday = dayLabels[day.weekday - 1];
+              return Expanded(
+                child: Column(
+                  children: [
+                    Text(weekday, style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary)),
+                    const SizedBox(height: 6),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: done ? habit.color : AppTheme.divider,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: done ? const Icon(Icons.check_rounded, color: Colors.white, size: 16) : null,
                     ),
-                    child: isCompleted
-                        ? const Icon(Icons.check_rounded,
-                            color: Colors.white, size: 18)
-                        : Text(
-                            '${day.day}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.textSecondary
-                                  .withOpacity(0.6),
-                            ),
-                          ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text('${day.day}', style: TextStyle(fontSize: 10, color: done ? habit.color : AppTheme.textSecondary)),
+                  ],
+                ),
               );
             }),
           ),
           const SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.cardBg,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.divider),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('About this habit',
-                    style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                        color: AppTheme.textPrimary)),
-                const SizedBox(height: 8),
-                Text(
-                  habit.description.isEmpty
-                      ? 'No description added yet.'
-                      : habit.description,
-                  style: const TextStyle(
-                      fontFamily: 'Nunito',
-                      fontSize: 13,
-                      color: AppTheme.textSecondary,
-                      height: 1.5),
-                ),
-                if (habit.reminders.isNotEmpty) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Icon(Icons.alarm_rounded,
-                          size: 14, color: habit.color),
-                      const SizedBox(width: 4),
-                      Text(
-                        'Reminders: ${habit.reminders.join(', ')}',
-                        style: TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 12,
-                            color: habit.color,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                ],
-              ],
-            ),
-          ),
+          const Text('Details', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: AppTheme.textPrimary)),
+          const SizedBox(height: 10),
+          _DetailRow(label: 'Frequency', value: habit.frequency.name),
+          _DetailRow(label: 'Category', value: habit.category.name),
+          _DetailRow(label: 'Target', value: '${habit.targetValue.toInt()} ${habit.unit}'),
+          _DetailRow(label: 'Weekly Rate', value: '${(habit.completionRateThisWeek * 100).round()}%'),
+          if (habit.reminders.isNotEmpty) _DetailRow(label: 'Reminders', value: habit.reminders.join(', ')),
+        ],
+      ),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _DetailRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 13, color: AppTheme.textSecondary)),
+          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
         ],
       ),
     );
@@ -448,19 +316,15 @@ class _HistoryTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sorted = [...habit.completedDates]..sort((a, b) => b.compareTo(a));
-    if (sorted.isEmpty) {
-      return const Center(
-          child: Text('No completions yet',
-              style: TextStyle(
-                  fontFamily: 'Nunito', color: AppTheme.textSecondary)));
-    }
+    final recent = sorted.take(20).toList();
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemCount: sorted.length,
+      itemCount: recent.length,
       itemBuilder: (_, i) {
-        final d = sorted[i];
+        final d = recent[i];
+        final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         return Container(
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: const EdgeInsets.only(bottom: 6),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: AppTheme.cardBg,
@@ -469,53 +333,12 @@ class _HistoryTab extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                    color: habit.color.withOpacity(0.12),
-                    shape: BoxShape.circle),
-                child: Icon(Icons.check_rounded,
-                    color: habit.color, size: 18),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${d.day}/${d.month}/${d.year}',
-                      style: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.textPrimary),
-                    ),
-                    Text(
-                      i == 0 ? 'Most recent' : '${i + 1} entries ago',
-                      style: const TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 11,
-                          color: AppTheme.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-              if (i == 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: habit.color.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text('Latest',
-                      style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: habit.color)),
-                ),
+              Icon(Icons.check_circle_rounded, color: habit.color, size: 18),
+              const SizedBox(width: 10),
+              Text('${dayNames[d.weekday - 1]}, ${d.day}/${d.month}/${d.year}',
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+              const Spacer(),
+              Text('Completed', style: TextStyle(fontSize: 11, color: habit.color, fontWeight: FontWeight.w600)),
             ],
           ),
         );
@@ -530,7 +353,7 @@ class _StatsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weekData = List.generate(7, (i) {
+    final data = List.generate(7, (i) {
       final day = DateTime.now().subtract(Duration(days: 6 - i));
       return habit.isCompletedOn(day) ? 1.0 : 0.0;
     });
@@ -538,107 +361,56 @@ class _StatsTab extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 160,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.cardBg,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppTheme.divider),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Weekly Performance',
-                    style: TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                        color: AppTheme.textSecondary)),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: BarChart(
-                    BarChartData(
-                      alignment: BarChartAlignment.spaceAround,
-                      maxY: 1.2,
-                      barTouchData: BarTouchData(enabled: false),
-                      titlesData: FlTitlesData(
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            getTitlesWidget: (v, _) {
-                              const days = [
-                                'M',
-                                'T',
-                                'W',
-                                'T',
-                                'F',
-                                'S',
-                                'S'
-                              ];
-                              return Text(days[v.toInt()],
-                                  style: const TextStyle(
-                                      fontFamily: 'Nunito',
-                                      fontSize: 10,
-                                      color: AppTheme.textSecondary));
-                            },
-                          ),
-                        ),
-                        leftTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
-                        topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
-                      ),
-                      gridData: const FlGridData(show: false),
-                      borderData: FlBorderData(show: false),
-                      barGroups: weekData
-                          .asMap()
-                          .entries
-                          .map((e) => BarChartGroupData(
-                                x: e.key,
-                                barRods: [
-                                  BarChartRodData(
-                                    toY: e.value,
-                                    color: e.value > 0
-                                        ? habit.color
-                                        : habit.color.withOpacity(0.15),
-                                    width: 20,
-                                    borderRadius:
-                                        const BorderRadius.vertical(
-                                            top: Radius.circular(6)),
-                                  ),
-                                ],
-                              ))
-                          .toList(),
+          const Text('Weekly Progress', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14, color: AppTheme.textPrimary)),
+          const SizedBox(height: 14),
+          SizedBox(
+            height: 140,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: 1.2,
+                barTouchData: BarTouchData(enabled: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (v, _) {
+                        const d = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+                        return Text(d[v.toInt()],
+                          style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary));
+                      },
                     ),
                   ),
+                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
-              ],
+                gridData: const FlGridData(show: false),
+                borderData: FlBorderData(show: false),
+                barGroups: data.asMap().entries.map((e) => BarChartGroupData(
+                  x: e.key,
+                  barRods: [
+                    BarChartRodData(
+                      toY: e.value,
+                      color: e.value > 0 ? habit.color : AppTheme.divider,
+                      width: 28,
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                    ),
+                  ],
+                )).toList(),
+              ),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 20),
           Row(
             children: [
-              _StatItem(
-                  label: 'Weekly Rate',
-                  value:
-                      '${(habit.completionRateThisWeek * 100).round()}%',
-                  color: habit.color),
+              _MiniStat(label: 'Total', value: '${habit.totalCompletions}', color: habit.color),
               const SizedBox(width: 10),
-              _StatItem(
-                label: 'All Time',
-                value: '${habit.totalCompletions}',
-                color: AppTheme.accent,
-              ),
+              _MiniStat(label: 'This Week', value: '${(habit.completionRateThisWeek * 7).round()}/7', color: AppTheme.accent),
               const SizedBox(width: 10),
-              _StatItem(
-                label: 'Best Streak',
-                value: '${habit.longestStreak}',
-                color: AppTheme.secondary,
-              ),
+              _MiniStat(label: 'Longest', value: '${habit.longestStreak} days', color: AppTheme.secondary),
             ],
           ),
         ],
@@ -647,37 +419,22 @@ class _StatsTab extends StatelessWidget {
   }
 }
 
-class _StatItem extends StatelessWidget {
+class _MiniStat extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
-  const _StatItem(
-      {required this.label, required this.value, required this.color});
+  const _MiniStat({required this.label, required this.value, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(14),
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(color: color.withOpacity(0.08), borderRadius: BorderRadius.circular(12)),
         child: Column(
           children: [
-            Text(value,
-                style: TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w800,
-                    color: color)),
-            const SizedBox(height: 2),
-            Text(label,
-                style: const TextStyle(
-                    fontFamily: 'Nunito',
-                    fontSize: 10,
-                    color: AppTheme.textSecondary),
-                textAlign: TextAlign.center),
+            Text(value, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: color)),
+            Text(label, style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary)),
           ],
         ),
       ),
