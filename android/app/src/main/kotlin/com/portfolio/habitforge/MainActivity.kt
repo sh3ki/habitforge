@@ -1,4 +1,4 @@
-package com.portfolio.habitforge
+package com.habitforge.app
 
 import io.flutter.embedding.android.FlutterActivity
 
