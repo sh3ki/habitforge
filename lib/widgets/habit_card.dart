@@ -27,61 +27,43 @@ class HabitCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: isCompletedToday
-              ? habit.color.withOpacity(0.06)
-              : AppTheme.cardBg,
-          borderRadius: BorderRadius.circular(20),
+          color: isCompletedToday ? habit.color.withOpacity(0.06) : AppTheme.cardBg,
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
-            color: isCompletedToday
-                ? habit.color.withOpacity(0.3)
-                : AppTheme.divider,
-            width: isCompletedToday ? 1.5 : 1,
+            color: isCompletedToday ? habit.color.withOpacity(0.25) : AppTheme.divider,
+            width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: [AppTheme.cardShadow],
         ),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              // Icon container
+              // Icon
               Container(
-                width: 52,
-                height: 52,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
-                  color: isCompletedToday
-                      ? habit.color
-                      : habit.color.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(16),
+                  color: isCompletedToday ? habit.color : habit.color.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    Icon(
-                      habit.icon,
-                      color: isCompletedToday ? Colors.white : habit.color,
-                      size: 26,
-                    ),
+                    Icon(habit.icon, color: isCompletedToday ? Colors.white : habit.color, size: 24),
                     if (isCompletedToday)
                       Positioned(
                         right: 0,
                         bottom: 0,
                         child: Container(
-                          width: 18,
-                          height: 18,
+                          width: 16,
+                          height: 16,
                           decoration: BoxDecoration(
                             color: AppTheme.accent,
                             shape: BoxShape.circle,
-                            border:
-                                Border.all(color: Colors.white, width: 1.5),
+                            border: Border.all(color: Colors.white, width: 1.5),
                           ),
-                          child: const Icon(Icons.check,
-                              color: Colors.white, size: 11),
+                          child: const Icon(Icons.check, color: Colors.white, size: 10),
                         ),
                       ),
                   ],
@@ -96,68 +78,37 @@ class HabitCard extends StatelessWidget {
                     Text(
                       habit.name,
                       style: TextStyle(
-                        fontFamily: 'Nunito',
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: isCompletedToday
-                            ? habit.color
-                            : AppTheme.textPrimary,
+                        color: isCompletedToday ? habit.color : AppTheme.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 3),
                     Row(
                       children: [
                         if (streak > 0) ...[
-                          Icon(
-                            Icons.local_fire_department_rounded,
-                            size: 13,
-                            color: streak >= 7
-                                ? AppTheme.streakBest
-                                : AppTheme.primary,
-                          ),
+                          Icon(Icons.local_fire_department_rounded, size: 13,
+                            color: streak >= 7 ? AppTheme.streakBest : AppTheme.secondary),
                           const SizedBox(width: 2),
-                          Text(
-                            '$streak day streak',
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: streak >= 7
-                                  ? AppTheme.streakBest
-                                  : AppTheme.primary,
-                            ),
-                          ),
+                          Text('$streak day streak',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600,
+                              color: streak >= 7 ? AppTheme.streakBest : AppTheme.secondary)),
                           const SizedBox(width: 8),
                         ],
-                        Text(
-                          '${habit.totalCompletions} total',
-                          style: const TextStyle(
-                            fontFamily: 'Nunito',
-                            fontSize: 12,
-                            color: AppTheme.textSecondary,
-                          ),
-                        ),
+                        Text('${habit.totalCompletions} total',
+                          style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary)),
                       ],
                     ),
                     if (showProgress) ...[
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Expanded(
-                            child: _WeekDots(habit: habit),
-                          ),
+                          Expanded(child: _WeekDots(habit: habit)),
                           const SizedBox(width: 6),
-                          Text(
-                            '${(completionRate * 100).round()}%',
-                            style: TextStyle(
-                              fontFamily: 'Nunito',
-                              fontSize: 11,
-                              fontWeight: FontWeight.w700,
-                              color: habit.color,
-                            ),
-                          ),
+                          Text('${(completionRate * 100).round()}%',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: habit.color)),
                         ],
                       ),
                     ],
@@ -165,31 +116,24 @@ class HabitCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              // Check button
+              // Toggle
               GestureDetector(
                 onTap: onToggleToday,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: 40,
-                  height: 40,
+                child: Container(
+                  width: 38,
+                  height: 38,
                   decoration: BoxDecoration(
-                    color: isCompletedToday
-                        ? habit.color
-                        : habit.color.withOpacity(0.1),
+                    color: isCompletedToday ? habit.color : habit.color.withOpacity(0.1),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isCompletedToday
-                          ? habit.color
-                          : habit.color.withOpacity(0.3),
+                      color: isCompletedToday ? habit.color : habit.color.withOpacity(0.3),
                       width: 1.5,
                     ),
                   ),
                   child: Icon(
-                    isCompletedToday
-                        ? Icons.check_rounded
-                        : Icons.add_rounded,
+                    isCompletedToday ? Icons.check_rounded : Icons.add_rounded,
                     color: isCompletedToday ? Colors.white : habit.color,
-                    size: 20,
+                    size: 18,
                   ),
                 ),
               ),
@@ -210,20 +154,16 @@ class _WeekDots extends StatelessWidget {
     return Row(
       children: List.generate(7, (i) {
         final day = DateTime.now().subtract(Duration(days: 6 - i));
-        final isCompleted = habit.isCompletedOn(day);
-        final isToday = i == 6;
-        return Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isCompleted ? habit.color : AppTheme.divider,
-              border: isToday
-                  ? Border.all(
-                      color: habit.color.withOpacity(0.5), width: 1.5)
-                  : null,
+        final done = habit.isCompletedOn(day);
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 1),
+            child: Container(
+              height: 5,
+              decoration: BoxDecoration(
+                color: done ? habit.color : AppTheme.divider,
+                borderRadius: BorderRadius.circular(3),
+              ),
             ),
           ),
         );
@@ -232,40 +172,46 @@ class _WeekDots extends StatelessWidget {
   }
 }
 
-class StreakBadge extends StatelessWidget {
-  final int streak;
-  final Color color;
+class HabitCardCompact extends StatelessWidget {
+  final Habit habit;
+  final VoidCallback? onTap;
 
-  const StreakBadge({super.key, required this.streak, required this.color});
+  const HabitCardCompact({super.key, required this.habit, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppTheme.primary, AppTheme.secondary],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    final isCompleted = habit.isCompletedOn(DateTime.now());
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 130,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: isCompleted ? habit.color.withOpacity(0.08) : AppTheme.cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: isCompleted ? habit.color.withOpacity(0.2) : AppTheme.divider),
         ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.local_fire_department_rounded,
-              color: Colors.white, size: 16),
-          const SizedBox(width: 4),
-          Text(
-            '$streak',
-            style: const TextStyle(
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.w800,
-              fontSize: 13,
-              color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: habit.color.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(habit.icon, color: habit.color, size: 18),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Text(habit.name,
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppTheme.textPrimary),
+              maxLines: 2, overflow: TextOverflow.ellipsis),
+            const Spacer(),
+            Text('${habit.currentStreak} days',
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: habit.color)),
+          ],
+        ),
       ),
     );
   }
